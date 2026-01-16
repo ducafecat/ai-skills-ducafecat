@@ -1,0 +1,27 @@
+---
+name: "系统消息通知"
+description: "此脚本发送 macOS 系统通知。"
+---
+
+# 系统消息通知
+
+当任务完成时，调用此脚本发送 macOS 系统通知。
+
+## 调用方式
+
+```bash
+./notify.sh "标题" "消息内容"
+```
+
+## 参数
+
+- 参数1: 通知标题（默认: AI Skills）
+- 参数2: 通知内容（默认: 任务完成）
+
+## 依赖
+
+需要先安装 terminal-notifier:
+
+```bash
+brew install terminal-notifier
+```

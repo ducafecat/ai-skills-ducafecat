@@ -1,0 +1,15 @@
+{
+  "name": "flutter-getx-create-page",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "create-page": "node create-page.js"
+  },
+  "bin": {
+    "flutter-create-page": "./create-page.js"
+  }
+}

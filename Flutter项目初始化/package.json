@@ -1,0 +1,15 @@
+{
+  "name": "flutter-getx-init",
+  "version": "1.0.0",
+  "description": "用猫哥的 ducafe_ui_core + getx 初始化一个规范的 flutter 项目",
+  "license": "ISC",
+  "author": "ducafecat",
+  "type": "commonjs",
+  "main": "index.js",
+  "bin": {
+    "flutter-getx-init": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
