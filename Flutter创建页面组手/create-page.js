@@ -161,8 +161,11 @@ class ${classCode}Page extends GetView<${classCode}Controller> {
 }
 
 function updatePagesIndex(saveDir, fileCode, classCode) {
-  const indexPath = path.join(saveDir, "lib", "pages", "index.dart");
-  const exportLine = `export '${fileCode}/index.dart';\n`;
+  const indexPath = path.join(process.cwd(), "lib/pages/index.dart");
+  const pagesDir = path.join(process.cwd(), "lib/pages");
+  const relativePath = path.relative(pagesDir, saveDir);
+  const exportPath = relativePath ? `${relativePath}/${fileCode}` : fileCode;
+  const exportLine = `export '${exportPath}/index.dart';\n`;
 
   if (fs.existsSync(indexPath)) {
     const content = fs.readFileSync(indexPath, "utf8");
@@ -185,6 +188,9 @@ async function main() {
   const saveDir = path.resolve(args[0]);
   let businessName = args[1];
 
+  console.log(`saveDir: ${saveDir}`);
+  console.log(`businessName: ${businessName}`);
+
   if (hasChinese(businessName)) {
     console.log(`检测到中文，正在翻译: ${businessName}`);
     businessName = await translateToEnglish(businessName);
@@ -192,7 +198,7 @@ async function main() {
   }
 
   const { fileCode, classCode } = generateCode(businessName);
-  const pageDir = path.join(saveDir, "lib", "pages", fileCode);
+  const pageDir = path.join(saveDir, fileCode);
   const widgetDir = path.join(pageDir, "widget");
 
   createDirectory(widgetDir);

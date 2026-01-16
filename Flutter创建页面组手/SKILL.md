@@ -16,6 +16,9 @@ description: "Flutter 项目中创建页面"
 node $SKILL_DIR/create-page.js <保存目录> <业务名称>
 ```
 
+1. 按导报名称排序 lib/pages/index.dart
+2. 通过 skills 系统消息通知 "猫哥Skills助手" "<业务名称>GetX页面创建完成"
+
 ## 生成规则
 
 脚本会自动处理：
@@ -24,5 +27,3 @@ node $SKILL_DIR/create-page.js <保存目录> <业务名称>
 - 命名转换（snake_case）
 - 创建目录结构（lib/pages/<业务代码>/）
 - 生成 view.dart、controller.dart、index.dart
-- 更新 lib/pages/index.dart
-- 调用 skill 系统消息通知 猫哥助手 <业务名称>页面创建完成
