@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 const targetDir = process.cwd();
 
@@ -17,28 +17,36 @@ function mkdirSync(dir) {
 function writeFile(filePath, content) {
   const dir = path.dirname(filePath);
   mkdirSync(dir);
-  fs.writeFileSync(filePath, content.trim() + '\n');
+  fs.writeFileSync(filePath, content.trim() + "\n");
   console.log(`✓ ${filePath}`);
 }
 
 // 安装依赖
 function installDeps() {
-  console.log('📦 安装依赖包...');
-  execSync('flutter pub add get', { cwd: targetDir, stdio: 'inherit' });
-  execSync('flutter pub add ducafe_ui_core', { cwd: targetDir, stdio: 'inherit' });
+  console.log("📦 安装依赖包...");
+  execSync("flutter pub add get", { cwd: targetDir, stdio: "inherit" });
+  execSync("flutter pub add ducafe_ui_core", {
+    cwd: targetDir,
+    stdio: "inherit",
+  });
 }
 
 // 创建 index 页面
 function createIndexPage() {
-  const pagesDir = path.join(targetDir, 'lib/pages');
-  
-  writeFile(path.join(pagesDir, 'index/controller.dart'), `
+  const pagesDir = path.join(targetDir, "lib/pages");
+
+  writeFile(
+    path.join(pagesDir, "index/controller.dart"),
+    `
 import 'package:get/get.dart';
 
 class IndexController extends GetxController {}
-`);
+`
+  );
 
-  writeFile(path.join(pagesDir, 'index/view.dart'), `
+  writeFile(
+    path.join(pagesDir, "index/view.dart"),
+    `
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,25 +62,34 @@ class IndexPage extends GetView<IndexController> {
     );
   }
 }
-`);
+`
+  );
 
-  writeFile(path.join(pagesDir, 'index/index.dart'), `
+  writeFile(
+    path.join(pagesDir, "index/index.dart"),
+    `
 library;
 
 export 'controller.dart';
 export 'view.dart';
-`);
+`
+  );
 
-  writeFile(path.join(pagesDir, 'index.dart'), `
+  writeFile(
+    path.join(pagesDir, "index.dart"),
+    `
 library;
 
 export 'index/index.dart';
-`);
+`
+  );
 }
 
 // 创建 Global
 function createGlobal() {
-  writeFile(path.join(targetDir, 'lib/global.dart'), `
+  writeFile(
+    path.join(targetDir, "lib/global.dart"),
+    `
 import 'package:flutter/material.dart';
 
 class Global {
@@ -96,75 +113,112 @@ class Global {
     // await ConfigService.to.init();
   }
 }
-`);
+`
+  );
 }
 
 // 创建 common 模块
 function createCommon() {
-  const commonDir = path.join(targetDir, 'lib/common');
+  const commonDir = path.join(targetDir, "lib/common");
 
   // routers
-  writeFile(path.join(commonDir, 'routers/names.dart'), `
+  writeFile(
+    path.join(commonDir, "routers/names.dart"),
+    `
 class RouteNames {
   static const main = '/';
 }
-`);
+`
+  );
 
-  writeFile(path.join(commonDir, 'routers/pages.dart'), `
+  writeFile(
+    path.join(commonDir, "routers/pages.dart"),
+    `
 class RoutePages {
   // 列表
   // static List<GetPage> list = [];
 }
-`);
+`
+  );
 
-  writeFile(path.join(commonDir, 'routers/index.dart'), `
+  writeFile(
+    path.join(commonDir, "routers/index.dart"),
+    `
 library;
 
 export 'names.dart';
 export 'pages.dart';
-`);
+`
+  );
 
   // values
-  writeFile(path.join(commonDir, 'values/constants.dart'), `
+  writeFile(
+    path.join(commonDir, "values/constants.dart"),
+    `
 /// 常量
 class Constants {
   // 服务 api
   static const apiUrl = 'https://api.example.com';
 }
-`);
+`
+  );
 
-  writeFile(path.join(commonDir, 'values/images.dart'), `
+  writeFile(
+    path.join(commonDir, "values/images.dart"),
+    `
 /// 图片 assets
 class AssetsImages {
 }
-`);
+`
+  );
 
-  writeFile(path.join(commonDir, 'values/svgs.dart'), `
+  writeFile(
+    path.join(commonDir, "values/svgs.dart"),
+    `
 /// svgs assets
 class AssetsSvgs {
 }
-`);
+`
+  );
 
-  writeFile(path.join(commonDir, 'values/index.dart'), `
+  writeFile(
+    path.join(commonDir, "values/index.dart"),
+    `
 library;
 
 export 'constants.dart';
 export 'images.dart';
 export 'svgs.dart';
-`);
+`
+  );
 
   // 其他模块
-  const modules = ['api', 'components', 'extension', 'i18n', 'models', 'services', 'style', 'utils', 'widgets'];
-  modules.forEach(mod => {
-    writeFile(path.join(commonDir, `${mod}/index.dart`), `
+  const modules = [
+    "api",
+    "components",
+    "extension",
+    "i18n",
+    "models",
+    "services",
+    "style",
+    "utils",
+    "widgets",
+  ];
+  modules.forEach((mod) => {
+    writeFile(
+      path.join(commonDir, `${mod}/index.dart`),
+      `
 library;
 
 // export './xxxx.dart';
-`);
+`
+    );
   });
 
   // common/index.dart
-  writeFile(path.join(commonDir, 'index.dart'), `
+  writeFile(
+    path.join(commonDir, "index.dart"),
+    `
 library;
 
 export 'api/index.dart';
@@ -178,12 +232,15 @@ export 'style/index.dart';
 export 'utils/index.dart';
 export 'values/index.dart';
 export 'widgets/index.dart';
-`);
+`
+  );
 }
 
 // 重写 main.dart
 function createMain() {
-  writeFile(path.join(targetDir, 'lib/main.dart'), `
+  writeFile(
+    path.join(targetDir, "lib/main.dart"),
+    `
 import 'package:ducafe_ui_core/ducafe_ui_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -215,20 +272,21 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-`);
+`
+  );
 }
 
 // 主函数
 function main() {
-  console.log('🚀 Flutter 项目初始化开始...\n');
-  
+  console.log("🚀 Flutter 项目初始化开始...\n");
+
   installDeps();
   createIndexPage();
   createGlobal();
   createCommon();
   createMain();
-  
-  console.log('\n✅ 初始化完成!');
+
+  console.log("\n✅ 初始化完成!");
 }
 
 main();
