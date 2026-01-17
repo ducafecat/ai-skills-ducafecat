@@ -4,10 +4,12 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
+// 检测输入中是否包含中文字符
 function hasChinese(str) {
   return /[\u4e00-\u9fa5]/.test(str);
 }
 
+// 使用 Google 翻译将中文转换为英文，失败时返回原文
 async function translateToEnglish(text) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -42,6 +44,7 @@ async function translateToEnglish(text) {
   });
 }
 
+// 转为 snake_case，适用于文件/目录命名
 function toSnakeCase(str) {
   return str
     .replace(/([A-Z])/g, "_$1")
@@ -52,6 +55,7 @@ function toSnakeCase(str) {
     .replace(/^_|_$/g, "");
 }
 
+// 转为 PascalCase，适用于类名
 function toPascalCase(str) {
   const snake = toSnakeCase(str);
   return snake
@@ -60,11 +64,13 @@ function toPascalCase(str) {
     .join("");
 }
 
+// 转为 camelCase，适用于变量名
 function toCamelCase(str) {
   const pascal = toPascalCase(str);
   return pascal.charAt(0).toLowerCase() + pascal.slice(1);
 }
 
+// 生成模板中使用的命名形式
 function generateCode(businessName) {
   const fileCode = toSnakeCase(businessName);
   const classCode = toPascalCase(businessName);
@@ -74,18 +80,21 @@ function generateCode(businessName) {
   return { fileCode, classCode, varCode, interfaceCode };
 }
 
+// 写文件前确保目录存在
 function createDirectory(dirPath) {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
 }
 
+// 写文件并自动创建父级目录
 function writeFile(filePath, content) {
   const dir = path.dirname(filePath);
   createDirectory(dir);
   fs.writeFileSync(filePath, content, "utf8");
 }
 
+// 生成 index.dart 的导出内容
 function generateIndexCode(fileCode) {
   return `library;
 
@@ -94,6 +103,7 @@ export './view.dart';
 `;
 }
 
+// 生成 controller 模板
 function generateControllerCode(classCode, fileCode) {
   return `import 'package:get/get.dart';
 
@@ -125,6 +135,7 @@ class ${classCode}Controller extends GetxController {
 `;
 }
 
+// 生成 view 模板
 function generateViewCode(classCode, fileCode) {
   return `import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -160,6 +171,7 @@ class ${classCode}Page extends GetView<${classCode}Controller> {
 `;
 }
 
+// 追加导出到 lib/pages/index.dart，便于统一引用
 function updatePagesIndex(saveDir, fileCode, classCode) {
   const indexPath = path.join(process.cwd(), "lib/pages/index.dart");
   const pagesDir = path.join(process.cwd(), "lib/pages");
@@ -177,6 +189,7 @@ function updatePagesIndex(saveDir, fileCode, classCode) {
   }
 }
 
+// CLI 入口：创建页面文件并更新导出
 async function main() {
   const args = process.argv.slice(2);
 
