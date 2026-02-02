@@ -17,11 +17,3 @@ description: "此脚本发送 macOS 系统通知。"
 
 - 参数1: 通知标题（默认: AI Skills）
 - 参数2: 通知内容（默认: 任务完成）
-
-## 依赖
-
-需要先安装 terminal-notifier:
-
-```bash
-brew install terminal-notifier
-```
